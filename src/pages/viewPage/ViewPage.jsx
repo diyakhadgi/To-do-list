@@ -1,48 +1,46 @@
-import React from "react";
+import { Link, useHistory, useParams } from "react-router-dom";
+import AuthCheckBoolean from "../../middleware/AuthCheckBoolean";
 import NavBar from "../NavBar";
-import {
-  Route,
-  useHistory,
-  useLocation,
-  useParams,
-} from "react-router-dom/cjs/react-router-dom.min";
 
-export default function ViewPage() {
+const ViewPage = () => {
   const history = useHistory();
 
-  // const getParams = useParams();
+  const getParams = useParams();
 
-  // const getID = getParams.id;
+  const getID = getParams.id;
 
   const getStorage = localStorage.getItem("todo")
     ? JSON.parse(localStorage.getItem("todo"))
     : [];
 
-  // const getData = getStorage[getID];
-
-  const getLocation = useLocation();
-
-  const getURLParams = new URLSearchParams(getLocation.search);
-
-  console.log(getLocation.search);
-
-  const getID = getURLParams.get("id");
-
   const getData = getStorage[getID];
 
+  // Query parse...
+
+  // const getLocation = useLocation();
+
+  // const getURLParams = new URLSearchParams(getLocation.search);
+
+  // const getID = getURLParams.get("id");
+
+  // console.log(getID);
+
+  // const getData = getStorage[getID];
+
+  // console.log(getLocation.search);
+
   const deleteTodo = () => {
-    
     getStorage.splice(getID, 1);
-    history.replace("/");
+
     localStorage.setItem("todo", JSON.stringify(getStorage));
-  } 
 
-
-
+    history.replace("/");
+  };
 
   return (
     <>
       <NavBar />
+
       <div className="todo_container">
         <button
           onClick={() => {
@@ -62,8 +60,23 @@ export default function ViewPage() {
         >
           {getData}
         </div>
-        <button style={{ background: "red" }} onClick={deleteTodo}>Delete To-do</button>
+        {AuthCheckBoolean() ? (
+          <>
+            <button style={{ background: "red" }} onClick={deleteTodo}>
+              {" "}
+              Delete To-do
+            </button>
+          </>
+        ) : (
+          <>
+            <p>
+              Login to see more options <Link to="/login">Login now!</Link>
+            </p>
+          </>
+        )}
       </div>
     </>
   );
-}
+};
+
+export default ViewPage;

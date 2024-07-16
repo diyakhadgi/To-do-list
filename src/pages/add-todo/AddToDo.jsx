@@ -1,6 +1,7 @@
 import React, { useRef, useState } from "react";
 import NavBar from "../NavBar";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import AuthCheck from "../../middleware/AuthCheck";
 
 export default function AddToDo() {
   
@@ -8,6 +9,8 @@ export default function AddToDo() {
 
   const history = useHistory();
 
+  // auth check
+  AuthCheck();
   const addToDo = (e) => {
     e.preventDefault();
   
